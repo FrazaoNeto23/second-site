@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cardápio de Açaí</title>
+    <link rel="stylesheet" href="css/style_cardapio.css">
+
+</head>
+<body>
+    <header>
+        <div class="cabeçalho"> 
+            <img src="img/logo.png" class="img-logo"> 
+            <h1 class="titulo">Cardápio Frazão Açaiteria</h1>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="#cardapio">Cardápio</a></li>
+                <li><a href="#contato">Contato</a></li>
+            </ul>
+        </nav>
+        <div class="cart" onclick="toggleCart()">🛒 Carrinho <span id="cart-count">0</span></div>
+        <div class="cart-items" id="cart-items">
+            <h4>Itens no Carrinho</h4>
+            <ul id="cart-list"></ul>
+        </div>
+    </header>
+    
+    <section id="cardapio">
+        <h2>Escolha seu Açaí</h2>
+        <div class="item-cardapio">
+            <h3>Litrão + 6 Adicionais Grátis</h3>
+            <p> Açaí Litrão traz 1 litro com 6 adicionais grátis! Escolha entre 20 itens e tenha uma explosão de sabores do seu jeito.</p>
+            <button class="comprar" onclick="addToCart('Litrão + 6 Adicionais Grátis')">Adicionar</button>
+        </div>
+        <div class="item-cardapio">
+            <h3>Açaí de 500ml + 3 adicionais</h3>
+            <p>Açaí cremoso de 500 ml + 3 adicionais grátis! Escolha entre 15 opções deliciosas e crie a combinação perfeita para um momento refrescante e irresistível.</p>
+            <button class="comprar" onclick="addToCart('Açaí de 500ml + 3 adicionais')">Adicionar</button>
+        </div>
+        <div class="item-cardapio">
+            <h3>Açaí Tradicional</h3>
+            <p>O verdadeiro sabor do açaí! Nosso açaí é artesanal e perfeito para cada momento do seu dia! *Os adicionais são de sua escolha e vendidos separadamente.</p>
+            <button class="comprar" onclick="addToCart('Açaí Tradicional')">Adicionar</button>
+        </div>
+    </section>
+    
+    <section id="contato">
+        <h2>Contato</h2>
+        <p>Faça seu pedido pelo WhatsApp: (11) 99999-9999</p>
+    </section>
+    
+    <footer>
+        <p>&copy; 2024 Açaí Delícia - Todos os direitos reservados.</p>
+    </footer>
+
+    <script>
+        let cartItems = JSON.parse(localStorage.getItem("cartItems")) || [];
+        updateCartCount();
+        updateCartList();
+
+        function addToCart(item) {
+            cartItems.push(item);
+            localStorage.setItem("cartItems", JSON.stringify(cartItems));
+            updateCartCount();
+            updateCartList();
+        }
+
+        function removeFromCart(index) {
+            cartItems.splice(index, 1);
+            localStorage.setItem("cartItems", JSON.stringify(cartItems));
+            updateCartCount();
+            updateCartList();
+        }
+
+        function updateCartCount() {
+            document.getElementById("cart-count").textContent = cartItems.length;
+        }
+
+        function updateCartList() {
+            const cartList = document.getElementById("cart-list");
+            cartList.innerHTML = "";
+            cartItems.forEach((item, index) => {
+                const li = document.createElement("li");
+                li.textContent = item;
+                
+                const removeBtn = document.createElement("button");
+                removeBtn.textContent = "X";
+                removeBtn.classList.add("remove-item");
+                removeBtn.onclick = () => removeFromCart(index);
+                
+                li.appendChild(removeBtn);
+                cartList.appendChild(li);
+            });
+        }
+
+        function toggleCart() {
+            const cartDiv = document.getElementById("cart-items");
+            cartDiv.style.display = cartDiv.style.display === "none" || cartDiv.style.display === "" ? "block" : "none";
+        }
+    </script>
+</body>
+</html>
