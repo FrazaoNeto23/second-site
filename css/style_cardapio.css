@@ -20,10 +20,25 @@ header {
     text-align: center;
 }
 
-header h1 {
-    font-size: 2.5em;
-    margin-bottom: 10px;
+.cabeçalho {
+    background-color: white;
+    padding-bottom: 15px;
 }
+
+.img-logo {
+    width: 15px;
+    margin-top: 0px;
+    margin-left: 0px;
+}
+
+.titulo {
+    font-size: 25px;
+    color: rgb(59, 22, 119);
+    margin-left: 50px;
+    margin-top: -80px;
+    text-align: center;
+}
+
 
 nav ul {
     list-style: none;
@@ -38,6 +53,7 @@ nav ul li a {
     color: rgb(59, 22, 119);
     text-decoration: none;
     font-size: 1.1em;
+    text-align: center;
 }
 
 nav ul li a:hover {
@@ -47,6 +63,7 @@ nav ul li a:hover {
 section {
     padding: 40px 0;
     margin: 20px 0;
+    
 }
 
 #cardapio h2, #contato h2 {
@@ -63,6 +80,7 @@ section {
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s ease;
+    cursor: pointer;
 }
 
 .item-cardapio h3 {
@@ -90,4 +108,12 @@ footer {
     text-align: center;
     padding: 15px;
     margin-top: 30px;
+}
+
+.comprar{
+    color:purple;
+    padding: 10px 20px;
+    background-color: transparent;
+    border-style: none;
+    cursor: pointer;
 }
