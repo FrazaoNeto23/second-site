@@ -26,16 +26,16 @@ header {
 }
 
 .img-logo {
-    width: 15px;
+    width: 60px;
     margin-top: 0px;
-    margin-left: 0px;
+    margin-left: -350px;
 }
 
 .titulo {
     font-size: 25px;
     color: rgb(59, 22, 119);
-    margin-left: 50px;
-    margin-top: -80px;
+    margin-left: 40px;
+    margin-top: -50px;
     text-align: center;
 }
 
@@ -69,7 +69,7 @@ section {
 #cardapio h2, #contato h2 {
     font-size: 2em;
     margin-bottom: 20px;
-    color: white;
+    color: #333;
 }
 
 .item-cardapio {
@@ -111,9 +111,10 @@ footer {
 }
 
 .comprar{
-    color:purple;
+    color: rgb(59, 22, 119);
     padding: 10px 20px;
     background-color: transparent;
     border-style: none;
     cursor: pointer;
+    margin-left: -10px;
 }
