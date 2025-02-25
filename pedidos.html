@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meus Pedidos - Açaí Delícia</title>
+    <link rel="stylesheet" href="css/style_cardapio.css">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+        }
+        .pedido-container {
+            max-width: 800px;
+            margin: 40px auto;
+            background: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            text-align: center;
+            color: #2d2d2d;
+        }
+        .pedido-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 15px;
+            border-bottom: 1px solid #ddd;
+        }
+        .pedido-item:last-child {
+            border-bottom: none;
+        }
+        .pedido-item span {
+            font-size: 14px;
+            color: #555;
+        }
+        .adicionais-container {
+            margin-top: 20px;
+            border-top: 2px solid #eee;
+            padding-top: 20px;
+        }
+        .adicionais-container label {
+            display: flex;
+            align-items: center;
+            margin: 10px 0;
+            font-size: 16px;
+            color: #333;
+        }
+        .adicionais-container input[type="checkbox"] {
+            margin-right: 10px;
+        }
+        .botao-voltar, .botao-adicionar {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            background: #ff6600;
+            color: white;
+            padding: 12px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 16px;
+        }
+        .botao-adicionar {
+            background: #4caf50;
+        }
+        .adicional-preco {
+            margin-left: auto;
+            font-weight: bold;
+            color: #f55;
+        }
+        .pedido-footer {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 16px;
+            color: #333;
+        }
+        .pedido-footer span {
+            font-weight: bold;
+        }
+        .pedido-footer #valor-total-adicionais {
+            color: #f55;
+        }
+    </style>
+</head>
+<body>
+    <div class="pedido-container">
+        <h2>Meus Pedidos</h2>
+        <div id="lista-pedidos"></div>
+
+        <div class="adicionais-container">
+            <h3>Adicionais</h3>
+            <label><input type="checkbox" value="Granola" id="granola" data-preco="2.00"> Granola (R$ 2,00)</label><br>
+            <label><input type="checkbox" value="Frutas" id="frutas" data-preco="3.00"> Frutas (R$ 3,00)</label><br>
+            <label><input type="checkbox" value="Leite Condensado" id="leite-condensado" data-preco="1.50"> Leite Condensado (R$ 1,50)</label><br>
+            <label><input type="checkbox" value="Nutella" id="nutella" data-preco="4.00"> Nutella (R$ 4,00)</label><br>
+            <label><input type="checkbox" value="M&Ms" id="mms" data-preco="2.50"> M&Ms (R$ 2,50)</label><br>
+            <label><input type="checkbox" value="Coco Ralado" id="coco-ralado" data-preco="1.00"> Coco Ralado (R$ 1,00)</label><br>
+            <label><input type="checkbox" value="Paçoca" id="pacoca" data-preco="2.00"> Paçoca (R$ 2,00)</label><br>
+            <label><input type="checkbox" value="Morango" id="morango" data-preco="3.00"> Morango (R$ 3,00)</label><br>
+        </div>
+
+        <a href="teste.html" class="botao-voltar">Voltar ao Cardápio</a>
+        <a href="#" class="botao-adicionar" onclick="adicionarAoCarrinho('Litrão + 6 Adicionais Grátis')">Adicionar ao Carrinho</a>
+
+        <div class="pedido-footer">
+            <span>Total dos Adicionais:</span> R$ <span id="valor-total-adicionais">0.00</span>
+        </div>
+    </div>
+
+    <script>
+        let pedidos = JSON.parse(localStorage.getItem("cartItems")) || [];
+        const listaPedidos = document.getElementById("lista-pedidos");
+
+        // Produto com adicionais gratuitos
+        const produtoComAdicionaisGratis = "Litrão + 6 Adicionais Grátis"; // Nome do produto com adicionais gratuitos
+
+        function mostrarPedidos() {
+            listaPedidos.innerHTML = "";
+            if (pedidos.length === 0) {
+                listaPedidos.innerHTML = "<p>Seu carrinho está vazio.</p>";
+                return;
+            }
+
+            pedidos.forEach((pedido, index) => {
+                const div = document.createElement("div");
+                div.classList.add("pedido-item");
+
+                // Calculando o valor dos adicionais
+                let valorTotalAdicionais = 0;
+                if (pedido.produto !== produtoComAdicionaisGratis) {
+                    valorTotalAdicionais = pedido.adicionais.reduce((total, adicional) => total + adicional.preco, 0);
+                }
+
+                div.innerHTML = `
+                    <span>${pedido.produto}</span>
+                    <span>Adicionais: ${pedido.adicionais.length > 0 ? pedido.adicionais.map(ad => ad.nome).join(', ') : "Nenhum"}</span>
+                    <span class="adicional-preco">R$ ${valorTotalAdicionais.toFixed(2)}</span>
+                    <button onclick="removerPedido(${index})">X</button>
+                `;
+                listaPedidos.appendChild(div);
+            });
+
+            // Atualizando o total
+            const valorTotalCarrinho = pedidos.reduce((total, pedido) => {
+                return total + pedido.adicionais.reduce((subtotal, adicional) => subtotal + adicional.preco, 0);
+            }, 0);
+            document.getElementById('valor-total-adicionais').textContent = valorTotalCarrinho.toFixed(2);
+        }
+
+        function adicionarAoCarrinho(produto) {
+            const adicionaisSelecionados = [];
+            const adicionais = document.querySelectorAll(".adicionais-container input[type='checkbox']:checked");
+
+            adicionais.forEach(adicional => {
+                const nome = adicional.value;
+                const preco = parseFloat(adicional.getAttribute("data-preco"));
+                adicionaisSelecionados.push({ nome, preco });
+            });
+
+            // Verifica se o produto é "Litrão + 6 Adicionais Grátis"
+            if (produto === produtoComAdicionaisGratis) {
+                // Para o produto com adicionais grátis, os adicionais são gratuitos
+                pedidos.push({
+                    produto: produto,
+                    adicionais: adicionaisSelecionados.map(adicional => ({ nome: adicional.nome, preco: 0 })) // Adicionais gratuitos
+                });
+            } else {
+                // Para os outros produtos, os adicionais têm custo
+                pedidos.push({
+                    produto: produto,
+                    adicionais: adicionaisSelecionados // Adicionais com custo
+                });
+            }
+
+            // Armazenando no localStorage e exibindo no carrinho
+            localStorage.setItem("cartItems", JSON.stringify(pedidos));
+            mostrarPedidos();
+        }
+
+        function removerPedido(index) {
+            pedidos.splice(index, 1);
+            localStorage.setItem("cartItems", JSON.stringify(pedidos));
+            mostrarPedidos();
+        }
+
+        mostrarPedidos();
+    </script>
+</body>
+</html>

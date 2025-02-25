@@ -5,7 +5,59 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cardápio de Açaí</title>
     <link rel="stylesheet" href="css/style_cardapio.css">
-
+    <style>
+        .cart {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #ff6600;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .cart span {
+            font-weight: bold;
+            margin-left: 5px;
+        }
+        .cart-items {
+            display: none;
+            position: fixed;
+            top: 60px;
+            right: 20px;
+            background: white;
+            border: 1px solid #ddd;
+            padding: 10px;
+            width: 250px;
+            box-shadow: 0px 4px 6px rgba(0,0,0,0.1);
+        }
+        .cart-items ul {
+            list-style: none;
+            padding: 0;
+        }
+        .cart-items li {
+            margin-bottom: 5px;
+            display: flex;
+            justify-content: space-between;
+        }
+        .remove-item {
+            background: red;
+            color: white;
+            border: none;
+            padding: 2px 5px;
+            cursor: pointer;
+        }
+        .checkout-button {
+            display: block;
+            margin-top: 10px;
+            text-align: center;
+            background: #ff6600;
+            color: white;
+            padding: 5px;
+            border-radius: 5px;
+            text-decoration: none;
+        }
+    </style>
 </head>
 <body>
     <header>
@@ -19,10 +71,11 @@
                 <li><a href="#contato">Contato</a></li>
             </ul>
         </nav>
-        <div class="cart" onclick="toggleCart()">🛒 Carrinho <span id="cart-count">0</span></div>
+        <div class="cart" onclick="toggleCart(event)">🛒 Carrinho <span id="cart-count">0</span></div>
         <div class="cart-items" id="cart-items">
             <h4>Itens no Carrinho</h4>
             <ul id="cart-list"></ul>
+            <a href="pedidos.html" class="checkout-button">Finalizar Compra</a>
         </div>
     </header>
     
@@ -43,13 +96,18 @@
             <p>O verdadeiro sabor do açaí! Nosso açaí é artesanal e perfeito para cada momento do seu dia! *Os adicionais são de sua escolha e vendidos separadamente.</p>
             <button class="comprar" onclick="addToCart('Açaí Tradicional')">Adicionar</button>
         </div>
+        <div class="item-cardapio">
+            <h3>Açaí Nutella</h3>
+            <p>Açaí + Nutella + Fruta</p>
+            <button class="comprar" onclick="addToCart('Açaí Tradicional')">Adicionar</button>
+        </div>
     </section>
     
     <section id="contato">
         <h2>Contato</h2>
         <p>Faça seu pedido pelo WhatsApp: (11) 99999-9999</p>
     </section>
-    
+     
     <footer>
         <p>&copy; 2024 Açaí Delícia - Todos os direitos reservados.</p>
     </footer>
@@ -94,10 +152,19 @@
             });
         }
 
-        function toggleCart() {
+        function toggleCart(event) {
+            event.stopPropagation();
             const cartDiv = document.getElementById("cart-items");
             cartDiv.style.display = cartDiv.style.display === "none" || cartDiv.style.display === "" ? "block" : "none";
         }
+
+        document.addEventListener("click", function(event) {
+            const cartDiv = document.getElementById("cart-items");
+            const cartButton = document.querySelector(".cart");
+            if (!cartDiv.contains(event.target) && !cartButton.contains(event.target)) {
+                cartDiv.style.display = "none";
+            }
+        });
     </script>
 </body>
 </html>
